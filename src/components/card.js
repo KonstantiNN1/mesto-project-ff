@@ -46,9 +46,9 @@ export function deleteCard(card) {
     card.addEventListener('click', function() {
         const deletingCard = card.parentNode; 
         deletingCard.remove();
-    })
-}
- 
+    });
+};
+
 // функция лайкания карточки
 export function toggleLike(like) {
     like.addEventListener('click', function() {
