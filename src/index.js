@@ -1,6 +1,6 @@
 import './index.css';
 import { initialCards } from './components/cards.js';
-import { addCard, deleteCard, toggleLike } from './components/card.js';
+import { createCard, addCard, deleteCard, toggleLike } from './components/card.js';
 import { openPopup, closePopup } from './components/modal.js';
 
 // константы 
@@ -11,7 +11,7 @@ const addingButton = document.querySelector('.profile__add-button');
 const closingEditButton = editingPopup.querySelector('.popup__close');
 const closingAddButton = addingPopup.querySelector('.popup__close');
 
-const editForm = document.forms[0];
+const editForm = document.forms['edit-profile'];
 const profileNameInput = editForm.elements.name;
 const profileDescriptionInput = editForm.elements.description;
 
@@ -19,9 +19,12 @@ const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 const places = document.querySelector('.places');
 
-const addForm = document.forms[1];
+const addForm = document.forms['new-place'];
 const cardNameInput = addForm.elements.place;
 const cardLinkInput = addForm.elements.link;
+
+export const elementsTemplate = document.querySelector('#card-template');
+export const elementsContainer = document.querySelector('.places__list');
 
 // функция работы с профилем 
 function editInfo(evt) {
@@ -57,36 +60,37 @@ closingAddButton.addEventListener('click', function() {
 });
 
 // закрытие попапа на оверлэй
-document.addEventListener('click', function(evt) {
+export function closeByOverlay(evt) {        
     const popup = document.querySelector('.popup_is-opened');
     if (evt.target === popup) {
         closePopup(popup);
     };
-});
+};
 
 // закрытие на escape
-document.addEventListener('keydown', function(evt) {
-    const popup = document.querySelector(`.popup_is-opened`);
-    if (evt.key === 'Escape') {
-        closePopup(popup);
-    };
-});
+export function closeByEscape(evt) { 
+        if (evt.key === 'Escape') {
+            const popup = document.querySelector(`.popup_is-opened`);
+            closePopup(popup);
+        };
+};
 
 // функция добавление карточки
-function createCard(evt) {
+function addNewCard(evt) {
     evt.preventDefault();
-    let newCard = {
+    const newCard = {
       name: cardNameInput.value,
       link: cardLinkInput.value
     }
-    places.append(newCard);
+    const newCardElement = createCard(newCard);
+    elementsContainer.prepend(newCardElement);
     closePopup(addingPopup);
     addForm.reset();
-    addCard([newCard]);
+    createCard([newCard]);
 }
 
 // сабмит добавления карточки, созданной с помощью попапа
-addForm.addEventListener(`submit`, createCard);
+addForm.addEventListener('submit', addNewCard);
 
 // вызов-создание встроенных карточек
 addCard(initialCards);

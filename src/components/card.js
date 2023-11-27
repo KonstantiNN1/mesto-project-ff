@@ -1,11 +1,17 @@
+import { initialCards } from './cards.js';
 import {openPopup, closePopup} from './modal.js';
+import {elementsTemplate, elementsContainer} from '../index.js'
 
-// функция добавления карточек из созданного массива
-const elementsTemplate = document.querySelector('#card-template');
-const elementsContainer = document.querySelector('.places__list');
+const imagePopup = document.querySelector('.popup_type_image');
+const imageImagePopup = imagePopup.querySelector('.popup__image');
+const captionImagePopup = imagePopup.querySelector('.popup__caption');
+const closingImagePopup = imagePopup.querySelector('.popup__close');
 
-export function addCard(cards) {
-    cards.forEach(function(card) {
+closingImagePopup.addEventListener('click', function() {
+    closePopup(imagePopup);
+});
+
+export function createCard(card) {
     const newCard = elementsTemplate.content.cloneNode(true);
     const cardImage = newCard.querySelector('.card__image');
     cardImage.src = card.link;
@@ -22,29 +28,22 @@ export function addCard(cards) {
     
     cardImage.addEventListener('click', function() {
         openPopup(imagePopup);
-        const imageImagePopup = imagePopup.querySelector('.popup__image');
-        const captionImagePopup = imagePopup.querySelector('.popup__caption');
-        imageImagePopup.src = this.src;
-        imageImagePopup.alt = this.alt;
-        captionImagePopup.textContent = this.alt;
-    })
-
-    const imagePopup = document.querySelector('.popup_type_image');
-    const closingImagePopup = imagePopup.querySelector('.popup__close');
-
-    closingImagePopup.addEventListener('click', function() {
-        closePopup(imagePopup);
+        imageImagePopup.src = card.link;
+        imageImagePopup.alt = card.name;
+        captionImagePopup.textContent = card.name;
     });
-
-    elementsContainer.append(newCard);
-
-    });
+    return newCard;
 };
+
+export function addCard() {
+    initialCards.forEach((item) => {
+      elementsContainer.append(createCard(item))});
+    };
 
 // функция удаления карточки
 export function deleteCard(card) {
     card.addEventListener('click', function() {
-        const deletingCard = card.parentNode; 
+        const deletingCard = card.closest('.card'); 
         deletingCard.remove();
     });
 };
