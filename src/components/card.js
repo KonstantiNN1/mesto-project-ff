@@ -1,15 +1,6 @@
 import { initialCards } from './cards.js';
 import {openPopup, closePopup} from './modal.js';
-import {elementsTemplate, elementsContainer} from '../index.js'
-
-const imagePopup = document.querySelector('.popup_type_image');
-const imageImagePopup = imagePopup.querySelector('.popup__image');
-const captionImagePopup = imagePopup.querySelector('.popup__caption');
-const closingImagePopup = imagePopup.querySelector('.popup__close');
-
-closingImagePopup.addEventListener('click', function() {
-    closePopup(imagePopup);
-});
+import {elementsTemplate, elementsContainer, imagePopup, imageImagePopup, captionImagePopup, closingImagePopup} from '../index.js';
 
 export function createCard(card) {
     const newCard = elementsTemplate.content.cloneNode(true);
@@ -25,20 +16,17 @@ export function createCard(card) {
 
     const deleteButton = newCard.querySelector('.card__delete-button');
     deleteCard(deleteButton);
-    
-    cardImage.addEventListener('click', function() {
-        openPopup(imagePopup);
-        imageImagePopup.src = card.link;
-        imageImagePopup.alt = card.name;
-        captionImagePopup.textContent = card.name;
-    });
+
+    handleImageclick(cardImage, card);
+
     return newCard;
 };
 
-export function addCard() {
+export function addCards() {
     initialCards.forEach((item) => {
-      elementsContainer.append(createCard(item))});
-    };
+      elementsContainer.append(createCard(item, { toggleLike, deleteCard, handleImageclick }));
+    });
+};
 
 // функция удаления карточки
 export function deleteCard(card) {
@@ -53,4 +41,13 @@ export function toggleLike(like) {
     like.addEventListener('click', function() {
         like.classList.toggle('card__like-button_is-active');
     });
+};
+
+export function handleImageclick(photo, card) {
+    photo.addEventListener('click', function() {
+        openPopup(imagePopup);
+        imageImagePopup.src = card.link;
+        imageImagePopup.alt = card.name;
+        captionImagePopup.textContent = card.name;
+        });
 };
