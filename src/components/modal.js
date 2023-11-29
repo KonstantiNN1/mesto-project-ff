@@ -1,4 +1,4 @@
-// функциb открытия и закрытия попапа
+// функции открытия и закрытия попапа
 
 export function openPopup(popup) {
     popup.classList.add('popup_is-opened');

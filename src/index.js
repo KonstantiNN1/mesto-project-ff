@@ -1,5 +1,5 @@
 import './index.css';
-import { createCard, addCards, deleteCard, toggleLike, handleImageclick } from './components/card.js';
+import { createCard, addCards, deleteCard, toggleLike, handleImageClick } from './components/card.js';
 import { openPopup, closePopup } from './components/modal.js';
 
 // константы 
@@ -74,7 +74,7 @@ function addNewCard(evt) {
       name: cardNameInput.value,
       link: cardLinkInput.value
     }
-    const newCardElement = createCard(newCard);
+    const newCardElement = createCard(newCard, { toggleLike, deleteCard, handleImageClick });
     elementsContainer.prepend(newCardElement);
     closePopup(addingPopup);
     addForm.reset();
