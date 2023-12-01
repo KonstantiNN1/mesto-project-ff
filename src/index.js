@@ -1,6 +1,7 @@
 import './index.css';
 import { createCard, addCards, deleteCard, toggleLike, handleImageClick } from './components/card.js';
 import { openPopup, closePopup } from './components/modal.js';
+import { enableValidation } from './components/validation.js';
 
 // константы 
 const editingPopup = document.querySelector('.popup_type_edit');
@@ -28,6 +29,7 @@ export const imagePopup = document.querySelector('.popup_type_image');
 export const imageImagePopup = imagePopup.querySelector('.popup__image');
 export const captionImagePopup = imagePopup.querySelector('.popup__caption');
 export const closingImagePopup = imagePopup.querySelector('.popup__close');
+
 
 // функция работы с профилем 
 function editInfo(evt) {
@@ -85,3 +87,5 @@ addForm.addEventListener('submit', addNewCard);
 
 // вызов-создание встроенных карточек
 addCards();
+
+enableValidation();

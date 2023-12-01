@@ -1,15 +1,17 @@
 // функции открытия и закрытия попапа
-
+import {cleanErrors, cleanInputs} from './validation.js'
 export function openPopup(popup) {
     popup.classList.add('popup_is-opened');
+    cleanErrors(popup);
+    cleanInputs(popup);
     document.addEventListener('keydown', closeByEscape);
-    document.addEventListener('mousedown', closeByOverlay) 
+    document.addEventListener('mousedown', closeByOverlay);
 };
 
 export function closePopup(popup) {
     popup.classList.remove('popup_is-opened');
     document.removeEventListener('keydown', closeByEscape);
-    document.removeEventListener('mousedown', closeByOverlay) 
+    document.removeEventListener('mousedown', closeByOverlay);
 };
 
 // закрытие попапа на оверлэй

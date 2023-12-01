@@ -10,3 +10,27 @@
 @import url('./blocks/popup/popup.css');
 @import url('./blocks/popup/_is-animated/popup_is-animated.css');
 @import url('./blocks/popup/_is-opened/popup_is-opened.css');
+
+.error_active {
+    color: red;
+}
+
+.popup__input_err {
+    border-bottom: 1px solid red;
+}
+
+.button_inactive {
+    background-color: white;
+    color: gray;
+    border: 1px solid gray;
+}
+
+.popup__set {
+    border: none;
+}
+
+.input__error {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+}
