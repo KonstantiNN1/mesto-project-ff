@@ -1,10 +1,8 @@
 import './index.css';
-import { createCard, deleteCard, toggleLike, handleImageClick } from './components/card.js';
 import { openPopup, closePopup } from './components/modal.js';
 import { enableValidation } from './components/validation.js';
 import { pushInfo, getInfo, getCards, postCard, getAvatar, pushAvatar} from './components/api.js'
-import { result } from 'lodash';
-import { addCards } from './components/card.js';
+import { add } from 'lodash';
 
 // константы 
 export const editingPopup = document.querySelector('.popup_type_edit');
@@ -17,6 +15,7 @@ const closingAddButton = addingPopup.querySelector('.popup__close');
 const editForm = document.forms['edit-profile'];
 const profileNameInput = editForm.elements.name;
 const profileDescriptionInput = editForm.elements.description;
+export const editSubmitButton = editForm.querySelector('.popup__button')
 
 export const profileTitle = document.querySelector('.profile__title');
 export const profileDescription = document.querySelector('.profile__description');
@@ -24,9 +23,13 @@ export const profileDescription = document.querySelector('.profile__description'
 export const addForm = document.forms['new-place'];
 export const cardNameInput = addForm.elements.place;
 export const cardLinkInput = addForm.elements.link;
+export const addSubmitButton = addForm.querySelector('.popup__button')
+
 
 export const avatarForm = document.forms['new-avatar'];
 export const avatarInput = avatarForm.elements.link;
+export const avatarSubmitButton = avatarForm.querySelector('.popup__button')
+
 
 export const elementsTemplate = document.querySelector('#card-template');
 export const elementsContainer = document.querySelector('.places__list');
@@ -42,39 +45,31 @@ const avatarPopup = document.querySelector('.popup_type_avatar');
 const closingAvatarPopup = avatarPopup.querySelector('.popup__close');
 
 
-//функция работы с профилем 
+//функция обновления информации профиля 
 function editInfo(evt) {
     evt.preventDefault();
     const newInfo = {
         name: profileNameInput.value,
         about: profileDescriptionInput.value
     };
-    pushInfo(newInfo)
+    pushInfo(newInfo);
+    closePopup(editingPopup);
 }
 
-// pushAvatar(imgUrl)
-//     .then((res) => {
-//       avatarLink.style.backgroundImage = `url("${res.avatar}")`;
-//       closePopup(avatarEditPopup);
-//     })
-//     .catch((err) => console.log(err))
-//     .finally(() => {
-//       avatarSubmitBtn.textContent = "Сохранить";
-//     });
-
+// функция обновления аватара
 function editAvatar(evt) {
     evt.preventDefault();
         const avatar = avatarInput.value
-    pushAvatar(avatar)
+    pushAvatar(avatar);
     closePopup(avatarPopup);
 }
 
-
-//обновление попапа с профилем по сабмиту
+//обновление попапа с профилем и аватара по сабмиту
 editForm.addEventListener('submit', editInfo);
-
 avatarForm.addEventListener('submit', editAvatar);
 
+// сабмит добавления карточки, созданной с помощью попапа
+addForm.addEventListener('submit', postCard);
 
 // открытие попапа с профилем по нажатию на кнопку
 editingButton.addEventListener('click', function() {
@@ -103,19 +98,17 @@ closingImagePopup.addEventListener('click', function() {
     closePopup(imagePopup);
 });
 
-// сабмит добавления карточки, созданной с помощью попапа
-addForm.addEventListener('submit', postCard);
+// открытие попапа изменения аватара
+openPhotoAvatar.addEventListener('click', function() {
+    openPopup(avatarPopup);
+});
+
+// закрытие попапа изменения аватара
+closingAvatarPopup.addEventListener('click', function() {
+    closePopup(avatarPopup);          
+});
 
 enableValidation();
 getInfo(); 
 getCards();
 getAvatar();
-// pushAvatar();
-
-openPhotoAvatar.addEventListener('click', function() {
-    openPopup(avatarPopup);
-});
-
-closingAvatarPopup.addEventListener('click', function() {
-    closePopup(avatarPopup);
-});

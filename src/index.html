@@ -41,14 +41,14 @@
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
       <form class="popup__form" name="edit-profile" novalidate>
-        <fieldset class="popup__set">
+        <fieldset class="popup__fieldset">
           <label class="popup__field">
             <input pattern="[a-zA-zа-яА-яёЁ\s\-]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" type="text" name="name" class="popup__input popup__input_type_name" id="name-input" placeholder="Имя" minlength="2" maxlength="40" required>
-            <span class="input__error name-input-error"></span>
+            <span class="popup__input-error name-input-error"></span>
           </label>
           <label class="popup__field">
             <input pattern="[a-zA-zа-яА-яёЁ\s\-]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" type="text" name="description" class="popup__input popup__input_type_description" id="description-input" placeholder="Занятие" minlength="2" maxlength="200" required>
-            <span class="input__error description-input-error"></span>
+            <span class="popup__input-error description-input-error"></span>
           </label>
           <button type="submit" class="button popup__button">Сохранить</button>
         </fieldset>
@@ -60,14 +60,14 @@
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Новое место</h3>
       <form class="popup__form" name="new-place" novalidate>
-        <fieldset class="popup__set">
+        <fieldset class="popup__fieldset">
           <label class="popup__field">
         <input pattern="[a-zA-zа-яА-яёЁ\s\-]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" type="text" name="place" class="popup__input popup__input_type_card-name" id="place-input" placeholder="Название" minlength="2" maxlength="30" required>
-        <span class="input__error place-input-error"></span>
+        <span class="popup__input-error place-input-error"></span>
           </label>
           <label class="popup__field">
         <input type="url" name="link" class="popup__input popup__input_type_url" id="link-input" placeholder="Ссылка на картинку" required>
-        <span class="input__error link-input-error"></span>
+        <span class="popup__input-error link-input-error"></span>
         </label>
         <button type="submit" class="button popup__button">Сохранить</button>
       </fieldset>
@@ -86,10 +86,10 @@
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Обновить аватар</h3>
       <form class="popup__form" name="new-avatar" novalidate>
-        <fieldset class="popup__set">
+        <fieldset class="popup__fieldset">
         <label class="popup__field">
           <input type="url" name="link" class="popup__input popup__input_type_url" id="link-input" placeholder="Ссылка на картинку" required>
-          <span class="input__error link-input-error"></span>
+          <span class="popup__input-error link-input-error"></span>
         </label>
         <button type="submit" class="button popup__button">Сохранить</button>
       </fieldset>
@@ -104,7 +104,7 @@
       <h2 class="card__title"></h2>
       <div>
         <button type="button" class="card__like-button"></button>
-        <p class="card__quantity-likes">0</p>
+        <p class="card__number-of-likes"></p>
       </div>
     </div>
   </li>

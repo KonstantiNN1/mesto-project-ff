@@ -1,19 +1,19 @@
 function showError(formElement, inputElement, errorMessage) {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
     errorElement.textContent = errorMessage;
-    errorElement.classList.toggle('error_active', true);
+    errorElement.classList.toggle('popup__input-error_active', true);
     inputElement.classList.toggle('popup__input_err', true);
 }
 
 function hideError(formElement, inputElement) {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    errorElement.classList.toggle('error_active', false);
+    errorElement.classList.toggle('popup__input-error_active', false);
     inputElement.classList.toggle('popup__input_err', false);
     errorElement.textContent = '';
 }
 
 export const cleanErrors = (formElement) => {
-    const errorElements = formElement.querySelectorAll('.input__error');
+    const errorElements = formElement.querySelectorAll('.popup__input_err');
     errorElements.forEach((errorElement) => {
         errorElement.textContent = '';
     });
@@ -54,14 +54,13 @@ const setEventListeners = (formElement) => {
     });
 };
 
-
 export const enableValidation = () => {
     const formList = Array.from(document.querySelectorAll('.popup__form'));
     formList.forEach((formElement) => {
         formElement.addEventListener('submit', function (evt) {
             evt.preventDefault();
         });
-    const fieldsetList = Array.from(formElement.querySelectorAll('.popup__set'));  
+    const fieldsetList = Array.from(formElement.querySelectorAll('.popup__fieldset'));  
     fieldsetList.forEach((fieldSet) => {
         setEventListeners(fieldSet);
         });
@@ -76,10 +75,10 @@ const hasInvalidInput = (inputList) => {
 
 const toggleButtonState = (inputList, buttonElement) => {
     if (hasInvalidInput(inputList)) {
-        buttonElement.classList.add('button_inactive');
+        buttonElement.classList.add('popup__button_inactive');
         buttonElement.setAttribute('disabled', true);
     } else {
-        buttonElement.classList.remove('button_inactive');
+        buttonElement.classList.remove('popup__button_inactive');
         buttonElement.removeAttribute('disabled');
     };
 };
