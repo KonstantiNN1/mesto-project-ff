@@ -1,28 +1,15 @@
-// function restrictedSymbols(inputElement) {
-//     const shouldBe = /^[a-zA-Zа-яА-ЯёЁ\s-]+$/;
-//     return shouldBe.test(inputElement.value) 
-// }
-
 function showError(formElement, inputElement, errorMessage) {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    errorElement.classList.add('error_active');
-    inputElement.classList.add('popup__input_err');
-    // if (!restrictedSymbols(inputElement)) {
-    //     errorElement.textContent = 'Оба поля могут содержать только латинские и кириллические буквы, знаки дефиса и пробелы';
-    // } else {
-        errorElement.textContent = errorMessage;
-    // }
+    errorElement.textContent = errorMessage;
+    errorElement.classList.toggle('error_active', true);
+    inputElement.classList.toggle('popup__input_err', true);
 }
 
 function hideError(formElement, inputElement) {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.remove('popup__input_err');
-    errorElement.classList.remove('error_active');
-    // if (restrictedSymbols(inputElement)) {
-    //     errorElement.textContent = ''
-    // } else {
-        errorElement.textContent = '';
-    // }
+    errorElement.classList.toggle('error_active', false);
+    inputElement.classList.toggle('popup__input_err', false);
+    errorElement.textContent = '';
 }
 
 export const cleanErrors = (formElement) => {
@@ -43,21 +30,22 @@ export const cleanInputs = (formElement) => {
     });
 };
 
-
 const checkInputValidity = (formElement, inputElement) => {
-    if (!inputElement.validity.valid) {
-        showError(formElement, inputElement, inputElement.validationMessage);
-    } else {
-        hideError(formElement, inputElement);
-    };
-  };
+    inputElement.validity.valid
+        ? hideError(formElement, inputElement)
+        : showError(formElement, inputElement, inputElement.validationMessage);
+};
 
 const setEventListeners = (formElement) => {
     const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
     const buttonElement = formElement.querySelector('.popup__button');
+
+    if (buttonElement) {
         buttonElement.addEventListener('input', function() {
             toggleButtonState(inputList, buttonElement);
         });
+    }
+
     inputList.forEach((inputElement) => {
         inputElement.addEventListener('input', function () {
             checkInputValidity(formElement, inputElement);
@@ -65,6 +53,7 @@ const setEventListeners = (formElement) => {
         });
     });
 };
+
 
 export const enableValidation = () => {
     const formList = Array.from(document.querySelectorAll('.popup__form'));
