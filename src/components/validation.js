@@ -23,7 +23,7 @@ export const cleanErrors = (formElement) => {
     })
 };
 
-export const cleanInputs = (formElement) => {
+export const clearValidation = (formElement) => {
     const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
     inputList.forEach((inputElement) => {
         inputElement.value = '';

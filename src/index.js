@@ -1,7 +1,8 @@
 import './index.css';
 import { openPopup, closePopup } from './components/modal.js';
 import { enableValidation } from './components/validation.js';
-import { pushInfo, getInfo, getCards, postCard, getAvatar, pushAvatar} from './components/api.js'
+import { pushInfo, getUserInfo, getCards, postCard, pushAvatar} from './components/api.js'
+import { addCards, createCard, toggleLike, deleteCard, handleImageClick } from './components/card.js'
 import { add } from 'lodash';
 
 // константы 
@@ -52,7 +53,11 @@ function editInfo(evt) {
         name: profileNameInput.value,
         about: profileDescriptionInput.value
     };
-    pushInfo(newInfo);
+    pushInfo(newInfo)
+    .then((newInfo) => {
+        profileTitle.textContent = newInfo.name;
+        profileDescription.textContent = newInfo.about;
+    });
     closePopup(editingPopup);
 }
 
@@ -60,7 +65,10 @@ function editInfo(evt) {
 function editAvatar(evt) {
     evt.preventDefault();
         const avatar = avatarInput.value
-    pushAvatar(avatar);
+    pushAvatar(avatar)
+    .then((avatar) => {
+        profileAvatar.style['background-image'] = `url(${avatar})`;            
+    });
     closePopup(avatarPopup);
 }
 
@@ -69,7 +77,24 @@ editForm.addEventListener('submit', editInfo);
 avatarForm.addEventListener('submit', editAvatar);
 
 // сабмит добавления карточки, созданной с помощью попапа
-addForm.addEventListener('submit', postCard);
+addForm.addEventListener('submit', function() {
+    postCard()
+    .then(() => {
+        const newCard = {
+            name: cardNameInput.value,
+            link: cardLinkInput.value,
+            likes: [],
+            _id: '',
+            owner: {
+                _id: 'e14caaa8dae8b43968f19c9f'
+            }
+        };
+        const newCardElement = createCard(newCard, { toggleLike, deleteCard, handleImageClick });
+        elementsContainer.prepend(newCardElement);
+        closePopup(addingPopup);
+        addForm.reset();
+    })
+});
 
 // открытие попапа с профилем по нажатию на кнопку
 editingButton.addEventListener('click', function() {
@@ -109,6 +134,15 @@ closingAvatarPopup.addEventListener('click', function() {
 });
 
 enableValidation();
-getInfo(); 
-getCards();
-getAvatar();
+
+Promise.all([getUserInfo(), getCards()])
+  .then(([userInfo, cards]) => {
+    profileTitle.textContent = userInfo.name;
+    profileDescription.textContent = userInfo.about;
+    profileAvatar.style.backgroundImage = `url("${userInfo.avatar}")`;
+
+    addCards(cards)
+  })
+  .catch((error) => {
+        console.log(`Ошибка при получении данных: ${error.message}`);
+  })

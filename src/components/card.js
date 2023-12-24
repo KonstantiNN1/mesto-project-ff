@@ -41,12 +41,13 @@ export function addCards(arr) {
 };
 
 // функция удаления карточки
-export function deleteCard(button, id) {
+export function deleteCard(button, id)
+    // .then(res => checkResponse(res))
+    {
     button.addEventListener('click', function() {
         const deletingCard = button.closest('.card');
         deleteCardAPI(id);
         deletingCard.remove();
-
     });
 };
 

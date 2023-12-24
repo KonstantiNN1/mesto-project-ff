@@ -1,9 +1,8 @@
 // функции открытия и закрытия попапа
-import {cleanErrors, cleanInputs} from './validation.js'
+import {clearValidation} from './validation.js'
 export function openPopup(popup) {
     popup.classList.add('popup_is-opened');
-    cleanErrors(popup);
-    cleanInputs(popup);
+    clearValidation(popup)
     document.addEventListener('keydown', closeByEscape);
     document.addEventListener('mousedown', closeByOverlay);
 };

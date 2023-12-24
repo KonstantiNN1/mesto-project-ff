@@ -1,6 +1,4 @@
-import {profileTitle, profileDescription, cardLinkInput, cardNameInput, addingPopup, addForm, elementsContainer, profileAvatar, editSubmitButton, addSubmitButton, avatarSubmitButton} from '../index.js';
-import {closePopup} from './modal.js'
-import {addCards, createCard, toggleLike, deleteCard, handleImageClick, updateLikesCount} from './card.js'
+import { cardLinkInput, cardNameInput, editSubmitButton, addSubmitButton, avatarSubmitButton} from '../index.js';
 
 const config = {
     baseUrl: 'https://nomoreparties.co/v1/wff-cohort-3',
@@ -18,25 +16,11 @@ function checkResponse(res) {
     };
 };
 
-export const getInfo = async () => {
+export const getUserInfo = async () => {
     return fetch(`${config.baseUrl}/users/me`, {
         headers: config.headers,
     })
     .then(res => checkResponse(res))
-    .then((result) => {
-        profileTitle.textContent = result.name
-        profileDescription.textContent = result.about
-    }); 
-};
-
-export const getAvatar = async () => {
-    return fetch(`${config.baseUrl}/users/me`, {
-        headers: config.headers
-    })
-    .then(res => checkResponse(res))
-    .then((result) => {
-        profileAvatar.style['background-image'] = `url(${result.avatar})`
-    });
 };
 
 export const getCards = async () => {
@@ -44,10 +28,6 @@ export const getCards = async () => {
         headers: config.headers
     })
     .then(res => checkResponse(res))
-    .then((result) => {
-        console.log(result)
-        addCards(result)
-        })
     .catch((error) => {
         console.log(`Ошибка при получении данных: ${error.message}`);
     });
@@ -64,10 +44,6 @@ export const pushInfo = async (newInfo) => {
         })
     })
     .then((res) => checkResponse(res))
-    .then((newInfo) => {
-        profileTitle.textContent = newInfo.name;
-        profileDescription.textContent = newInfo.about;
-    })
     .catch((error) => {
         console.log(`Ошибка при сохранении данных: ${error.message}`);
     })
@@ -86,9 +62,6 @@ export const pushAvatar = async (avatar) => {
         })
     })
     .then(res => checkResponse(res))
-    .then((avatar) => {
-        profileAvatar.style['background-image'] = `url(${avatar})`;            
-    })
     .catch((error) => {
         console.log(`Ошибка при сохранении данных: ${error.message}`);
     })
@@ -99,7 +72,6 @@ export const pushAvatar = async (avatar) => {
     
 export const postCard = async () => {
     addSubmitButton.textContent = 'Сохранение...';
-
     return fetch(`${config.baseUrl}/cards`, {
         method: 'POST',
         headers: config.headers,
@@ -109,21 +81,6 @@ export const postCard = async () => {
         })
     })
     .then(res => checkResponse(res))
-    .then(() => {
-        const newCard = {
-            name: cardNameInput.value,
-            link: cardLinkInput.value,
-            likes: [],
-            _id: '',
-            owner: {
-                _id: 'e14caaa8dae8b43968f19c9f'
-            }
-        };
-        const newCardElement = createCard(newCard, { toggleLike, deleteCard, handleImageClick });
-        elementsContainer.prepend(newCardElement);
-        closePopup(addingPopup);
-        addForm.reset();
-    })
     .catch(error => {
         console.log(`Ошибка при сохранении данных: ${error.message}`);
     })
@@ -148,9 +105,6 @@ export const likeCardAPI = async (id) => {
         }
     })
     .then(res => checkResponse(res))
-    .then ((result) => {
-        return result
-    });
 };
     
 export const deletelikeCardAPI = async (id) => {
@@ -159,7 +113,4 @@ export const deletelikeCardAPI = async (id) => {
         headers: config.headers
     })
     .then(res => checkResponse(res))
-    .then ((result) => {
-        return result
-    });
 };
