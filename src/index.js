@@ -17,7 +17,6 @@ const editForm = document.forms['edit-profile'];
 const profileNameInput = editForm.elements.name;
 const profileDescriptionInput = editForm.elements.description;
 export const editSubmitButton = editForm.querySelector('.popup__button')
-
 export const profileTitle = document.querySelector('.profile__title');
 export const profileDescription = document.querySelector('.profile__description');
 
@@ -45,6 +44,7 @@ const openPhotoAvatar = document.querySelector('.profile__image-container');
 const avatarPopup = document.querySelector('.popup_type_avatar');
 const closingAvatarPopup = avatarPopup.querySelector('.popup__close');
 
+export let userId = ''
 
 //функция обновления информации профиля 
 function editInfo(evt) {
@@ -64,13 +64,16 @@ function editInfo(evt) {
 // функция обновления аватара
 function editAvatar(evt) {
     evt.preventDefault();
-        const avatar = avatarInput.value
+    const avatar = avatarInput.value;
     pushAvatar(avatar)
-    .then((avatar) => {
-        profileAvatar.style['background-image'] = `url(${avatar})`;            
+    .then((newAvatar) => {
+        profileAvatar.style['background-image'] = `url(${newAvatar})`;
+    })
+    .catch((error) => {
+        console.error(`Ошибка при обновлении аватара: ${error.message}`);
     });
     closePopup(avatarPopup);
-}
+  }
 
 //обновление попапа с профилем и аватара по сабмиту
 editForm.addEventListener('submit', editInfo);
@@ -84,9 +87,9 @@ addForm.addEventListener('submit', function() {
             name: cardNameInput.value,
             link: cardLinkInput.value,
             likes: [],
-            _id: '',
+            _id: userId,
             owner: {
-                _id: 'e14caaa8dae8b43968f19c9f'
+                _id: userId
             }
         };
         const newCardElement = createCard(newCard, { toggleLike, deleteCard, handleImageClick });
@@ -140,8 +143,8 @@ Promise.all([getUserInfo(), getCards()])
     profileTitle.textContent = userInfo.name;
     profileDescription.textContent = userInfo.about;
     profileAvatar.style.backgroundImage = `url("${userInfo.avatar}")`;
-
-    addCards(cards)
+    userId = userInfo._id;
+    addCards(cards);
   })
   .catch((error) => {
         console.log(`Ошибка при получении данных: ${error.message}`);

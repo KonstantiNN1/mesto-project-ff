@@ -1,5 +1,5 @@
 import { openPopup } from './modal.js';
-import { elementsTemplate, elementsContainer, imagePopup, imageImagePopup, captionImagePopup } from '../index.js';
+import { elementsTemplate, elementsContainer, imagePopup, imageImagePopup, captionImagePopup, userId } from '../index.js';
 import { deleteCardAPI, likeCardAPI, deletelikeCardAPI } from './api.js'
 
 export function createCard(card, { toggleLike, deleteCard, handleImageClick }) {
@@ -16,15 +16,15 @@ export function createCard(card, { toggleLike, deleteCard, handleImageClick }) {
 
     const likeButton = newCard.querySelector('.card__like-button');
     for (let i = 0; i < card.likes.length; i++) {
-        if (card.likes[i]._id === 'e14caaa8dae8b43968f19c9f') {
+        if (card.likes[i]._id === userId) {
             likeButton.classList.toggle('card__like-button_is-active')
         };
     };
 
-    toggleLike(likeButton, card._id);
+    toggleLike(likeButton, card._id, likeNumber, card);
 
     const deleteButton = newCard.querySelector('.card__delete-button');
-    if (card.owner._id !== 'e14caaa8dae8b43968f19c9f') {
+    if (card.owner._id !== userId) {
         deleteButton.style.visibility = 'hidden'
     };
 
@@ -46,20 +46,32 @@ export function deleteCard(button, id)
     {
     button.addEventListener('click', function() {
         const deletingCard = button.closest('.card');
-        deleteCardAPI(id);
-        deletingCard.remove();
+        deleteCardAPI(id)
+        .then(() => {
+        deletingCard.remove()
+        });
     });
 };
 
 // функция лайкания карточки
-export function toggleLike(like, id) {
+export function toggleLike(like, id, likeNumber, card) {
     like.addEventListener('click', function() {
         if (like.classList.contains('card__like-button_is-active')) {
-            like.classList.toggle('card__like-button_is-active');
-            deletelikeCardAPI(id);
+            deletelikeCardAPI(id)
+            .then(() => {
+                like.classList.toggle('card__like-button_is-active');
+            })
+            .then(() => {
+                likeNumber.textContent = card.likes.length;
+            })
         } else {
+            likeCardAPI(id)
+            .then(() => {
             like.classList.toggle('card__like-button_is-active');
-        likeCardAPI(id);
+            })
+            .then(() => {
+                likeNumber.textContent = card.likes.length;
+            })
         };
     });
 };

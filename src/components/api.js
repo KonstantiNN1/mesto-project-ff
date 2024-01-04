@@ -22,7 +22,7 @@ export const getUserInfo = async () => {
     })
     .then(res => checkResponse(res))
 };
-
+  
 export const getCards = async () => {
     return fetch(`${config.baseUrl}/cards`, {
         headers: config.headers
@@ -58,7 +58,7 @@ export const pushAvatar = async (avatar) => {
         method: 'PATCH',
         headers: config.headers,
         body: JSON.stringify({
-            avatar: avatar
+            avatar
         })
     })
     .then(res => checkResponse(res))
@@ -95,16 +95,20 @@ export const deleteCardAPI = async (id) => {
         headers: config.headers
     })
     .then(res => checkResponse(res))
+    .catch((error) => {
+        console.log(`Ошибка при сохранении данных: ${error.message}`);
+    })
 };
 
 export const likeCardAPI = async (id) => {
     return fetch(`${config.baseUrl}/cards/likes/${id}`, {
         method:  'PUT',
-        headers: {
-            authorization: '63208fac-4a88-4355-afd5-d75a6f5f0710'
-        }
+        headers: config.headers
     })
     .then(res => checkResponse(res))
+    .catch((error) => {
+        console.log(`Ошибка при сохранении данных: ${error.message}`);
+    })
 };
     
 export const deletelikeCardAPI = async (id) => {
@@ -113,4 +117,7 @@ export const deletelikeCardAPI = async (id) => {
         headers: config.headers
     })
     .then(res => checkResponse(res))
+    .catch((error) => {
+        console.log(`Ошибка при сохранении данных: ${error.message}`);
+    })
 };
