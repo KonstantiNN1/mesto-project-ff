@@ -106,6 +106,8 @@ export const likeCardAPI = async (id) => {
         headers: config.headers
     })
     .then(res => checkResponse(res))
+    .then((data) => {
+        return data.likes.length})
     .catch((error) => {
         console.log(`Ошибка при сохранении данных: ${error.message}`);
     })
@@ -117,6 +119,8 @@ export const deletelikeCardAPI = async (id) => {
         headers: config.headers
     })
     .then(res => checkResponse(res))
+    .then((data) => {
+        return data.likes.length})
     .catch((error) => {
         console.log(`Ошибка при сохранении данных: ${error.message}`);
     })

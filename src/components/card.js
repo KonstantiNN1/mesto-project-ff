@@ -58,20 +58,16 @@ export function toggleLike(like, id, likeNumber, card) {
     like.addEventListener('click', function() {
         if (like.classList.contains('card__like-button_is-active')) {
             deletelikeCardAPI(id)
-            .then(() => {
+            .then((newLikesNumber) => {
                 like.classList.toggle('card__like-button_is-active');
-            })
-            .then(() => {
-                likeNumber.textContent = card.likes.length;
-            })
+                likeNumber.textContent = newLikesNumber;
+            });
         } else {
             likeCardAPI(id)
-            .then(() => {
-            like.classList.toggle('card__like-button_is-active');
-            })
-            .then(() => {
-                likeNumber.textContent = card.likes.length;
-            })
+            .then((newLikesNumber) => {
+                like.classList.toggle('card__like-button_is-active');
+                likeNumber.textContent = newLikesNumber;
+            });
         };
     });
 };

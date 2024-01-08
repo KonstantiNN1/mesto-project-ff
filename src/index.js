@@ -67,7 +67,7 @@ function editAvatar(evt) {
     const avatar = avatarInput.value;
     pushAvatar(avatar)
     .then((newAvatar) => {
-        profileAvatar.style['background-image'] = `url(${newAvatar})`;
+        profileAvatar.style['background-image'] = `url(${newAvatar.avatar})`;
     })
     .catch((error) => {
         console.error(`Ошибка при обновлении аватара: ${error.message}`);
