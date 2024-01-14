@@ -2,7 +2,6 @@
 import {clearValidation} from './validation.js'
 export function openPopup(popup) {
     popup.classList.add('popup_is-opened');
-    clearValidation(popup)
     document.addEventListener('keydown', closeByEscape);
     document.addEventListener('mousedown', closeByOverlay);
 };

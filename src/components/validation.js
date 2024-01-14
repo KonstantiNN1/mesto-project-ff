@@ -1,32 +1,60 @@
+const validationConfig = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inputField: '.popup__fieldset',
+    inactiveButtonClass: 'popup__button_inactive',
+    inputErrorClass: 'popup__input_err',
+    errorClass: 'popup__input-error_active',
+  }; 
+
 function showError(formElement, inputElement, errorMessage) {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
     errorElement.textContent = errorMessage;
-    errorElement.classList.toggle('popup__input-error_active', true);
-    inputElement.classList.toggle('popup__input_err', true);
+    errorElement.classList.toggle(validationConfig.errorClass, true);
+    inputElement.classList.toggle(validationConfig.inputErrorClass, true);
 }
 
 function hideError(formElement, inputElement) {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    errorElement.classList.toggle('popup__input-error_active', false);
-    inputElement.classList.toggle('popup__input_err', false);
+    errorElement.classList.toggle(validationConfig.errorClass, false);
+    inputElement.classList.toggle(validationConfig.inputErrorClass, false);
     errorElement.textContent = '';
 }
 
 export const cleanErrors = (formElement) => {
-    const errorElements = formElement.querySelectorAll('.popup__input_err');
+    const errorElements = formElement.querySelectorAll(validationConfig.inputErrorClass);
     errorElements.forEach((errorElement) => {
         errorElement.textContent = '';
     });
-    const listInputs = formElement.querySelectorAll('.popup__input');
+    const listInputs = formElement.querySelectorAll(validationConfig.inputSelector);
     listInputs.forEach((errorElement) => {
-        errorElement.classList.remove('popup__input_err')
+        errorElement.classList.remove(validationConfig.inputErrorClass)
     })
 };
 
 export const clearValidation = (formElement) => {
-    const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
+    const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
     inputList.forEach((inputElement) => {
         inputElement.value = '';
+    });
+
+    // из-за этого появляется ошибка: validation.js:44 Uncaught TypeError: Cannot read properties of null (reading 'classList')
+    // at clearValidation (validation.js:44:17)
+    // at openPopup (modal.js:13:66)
+    // at HTMLImageElement.eval (card.js:96:57)
+
+    const buttonElement = formElement.querySelector(
+        validationConfig.submitButtonSelector,
+      );
+      buttonElement.classList.add(validationConfig.inactiveButtonClass);
+      inputList.forEach((inputElement) => {
+        hideError(
+          formElement,
+          inputElement,
+          validationConfig.inputErrorClass,
+          validationConfig.errorClass,
+        )
     });
 };
 
@@ -37,8 +65,8 @@ const checkInputValidity = (formElement, inputElement) => {
 };
 
 const setEventListeners = (formElement) => {
-    const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
-    const buttonElement = formElement.querySelector('.popup__button');
+    const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
+    const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);
 
     if (buttonElement) {
         buttonElement.addEventListener('input', function() {
@@ -55,12 +83,12 @@ const setEventListeners = (formElement) => {
 };
 
 export const enableValidation = () => {
-    const formList = Array.from(document.querySelectorAll('.popup__form'));
+    const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
     formList.forEach((formElement) => {
         formElement.addEventListener('submit', function (evt) {
             evt.preventDefault();
         });
-    const fieldsetList = Array.from(formElement.querySelectorAll('.popup__fieldset'));  
+    const fieldsetList = Array.from(formElement.querySelectorAll(validationConfig.inputField));  
     fieldsetList.forEach((fieldSet) => {
         setEventListeners(fieldSet);
         });
@@ -75,10 +103,10 @@ const hasInvalidInput = (inputList) => {
 
 const toggleButtonState = (inputList, buttonElement) => {
     if (hasInvalidInput(inputList)) {
-        buttonElement.classList.add('popup__button_inactive');
+        buttonElement.classList.add(validationConfig.inactiveButtonClass);
         buttonElement.setAttribute('disabled', true);
     } else {
-        buttonElement.classList.remove('popup__button_inactive');
+        buttonElement.classList.remove(validationConfig.inactiveButtonClass);
         buttonElement.removeAttribute('disabled');
     };
 };

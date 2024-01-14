@@ -1,8 +1,8 @@
 import './index.css';
 import { openPopup, closePopup } from './components/modal.js';
-import { enableValidation } from './components/validation.js';
+import { enableValidation, clearValidation } from './components/validation.js';
 import { pushInfo, getUserInfo, getCards, postCard, pushAvatar} from './components/api.js'
-import { addCards, createCard, toggleLike, deleteCard, handleImageClick } from './components/card.js'
+import { createCard, toggleLike, deleteCard } from './components/card.js'
 import { add } from 'lodash';
 
 // константы 
@@ -57,8 +57,15 @@ function editInfo(evt) {
     .then((newInfo) => {
         profileTitle.textContent = newInfo.name;
         profileDescription.textContent = newInfo.about;
+        closePopup(editingPopup);
+        clearValidation(editingPopup)
+    })
+    .catch((error) => {
+        console.log(`Ошибка при сохранении данных: ${error.message}`);
+    })
+    .finally(() => {
+        editSubmitButton.textContent = "Сохранить";
     });
-    closePopup(editingPopup);
 }
 
 // функция обновления аватара
@@ -68,12 +75,16 @@ function editAvatar(evt) {
     pushAvatar(avatar)
     .then((newAvatar) => {
         profileAvatar.style['background-image'] = `url(${newAvatar.avatar})`;
+        closePopup(avatarPopup);
+        clearValidation(avatarPopup);
     })
     .catch((error) => {
-        console.error(`Ошибка при обновлении аватара: ${error.message}`);
-    });
-    closePopup(avatarPopup);
-  }
+        console.log(`Ошибка при сохранении данных: ${error.message}`);
+    })
+    .finally(() => {
+        avatarSubmitButton.textContent = "Сохранить";
+    })
+}
 
 //обновление попапа с профилем и аватара по сабмиту
 editForm.addEventListener('submit', editInfo);
@@ -87,17 +98,31 @@ addForm.addEventListener('submit', function() {
             name: cardNameInput.value,
             link: cardLinkInput.value,
             likes: [],
-            _id: userId,
+            _id: '',
             owner: {
                 _id: userId
             }
-        };
+        }
         const newCardElement = createCard(newCard, { toggleLike, deleteCard, handleImageClick });
         elementsContainer.prepend(newCardElement);
         closePopup(addingPopup);
         addForm.reset();
+        clearValidation(addingPopup);
     })
-});
+    .catch(error => {
+        console.log(`Ошибка при сохранении данных: ${error.message}`);
+    })
+    .finally(() => {
+        addSubmitButton.textContent = "Сохранить";
+    });
+    
+})
+
+function addCards(arr) {
+    arr.forEach((item) => {
+      elementsContainer.append(createCard(item, { toggleLike, deleteCard, handleImageClick }));
+    });
+};
 
 // открытие попапа с профилем по нажатию на кнопку
 editingButton.addEventListener('click', function() {
@@ -109,9 +134,11 @@ editingButton.addEventListener('click', function() {
 // закрытие попапа с профилем (без сабмита)
 closingEditButton.addEventListener('click', function() {
     closePopup(editingPopup);
+    clearValidation(editingPopup)
 });
 
 // открытие попапа добавления карточки
+clearValidation(addingPopup)
 addingButton.addEventListener('click', function() {
     openPopup(addingPopup);
 });
@@ -119,6 +146,7 @@ addingButton.addEventListener('click', function() {
 // закрытие попапа добавление карточки (без сабмита)
 closingAddButton.addEventListener('click', function() {
     closePopup(addingPopup);
+    clearValidation(addingPopup)
 });
 
 // закрытие попапа увелечения карточки (без сабмита)
@@ -133,8 +161,19 @@ openPhotoAvatar.addEventListener('click', function() {
 
 // закрытие попапа изменения аватара
 closingAvatarPopup.addEventListener('click', function() {
-    closePopup(avatarPopup);          
+    closePopup(avatarPopup);
+    clearValidation(avatarPopup)
+          
 });
+
+export function handleImageClick(photo, card) {
+    photo.addEventListener('click', function() {
+        openPopup(imagePopup);
+        imageImagePopup.src = card.link;
+        imageImagePopup.alt = card.name;
+        captionImagePopup.textContent = card.name;
+        });
+};
 
 enableValidation();
 
@@ -149,3 +188,4 @@ Promise.all([getUserInfo(), getCards()])
   .catch((error) => {
         console.log(`Ошибка при получении данных: ${error.message}`);
   })
+  

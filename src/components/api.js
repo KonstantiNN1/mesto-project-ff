@@ -28,9 +28,6 @@ export const getCards = async () => {
         headers: config.headers
     })
     .then(res => checkResponse(res))
-    .catch((error) => {
-        console.log(`Ошибка при получении данных: ${error.message}`);
-    });
 };
     
 export const pushInfo = async (newInfo) => {
@@ -44,12 +41,6 @@ export const pushInfo = async (newInfo) => {
         })
     })
     .then((res) => checkResponse(res))
-    .catch((error) => {
-        console.log(`Ошибка при сохранении данных: ${error.message}`);
-    })
-    .finally(() => {
-        editSubmitButton.textContent = "Сохранить";
-    });
 };
 
 export const pushAvatar = async (avatar) => {
@@ -62,12 +53,6 @@ export const pushAvatar = async (avatar) => {
         })
     })
     .then(res => checkResponse(res))
-    .catch((error) => {
-        console.log(`Ошибка при сохранении данных: ${error.message}`);
-    })
-    .finally(() => {
-        avatarSubmitButton.textContent = "Сохранить";
-    });
 };
     
 export const postCard = async () => {
@@ -81,12 +66,6 @@ export const postCard = async () => {
         })
     })
     .then(res => checkResponse(res))
-    .catch(error => {
-        console.log(`Ошибка при сохранении данных: ${error.message}`);
-    })
-    .finally(() => {
-        addSubmitButton.textContent = "Сохранить";
-    });
 };
 
 export const deleteCardAPI = async (id) => {
@@ -95,9 +74,6 @@ export const deleteCardAPI = async (id) => {
         headers: config.headers
     })
     .then(res => checkResponse(res))
-    .catch((error) => {
-        console.log(`Ошибка при сохранении данных: ${error.message}`);
-    })
 };
 
 export const likeCardAPI = async (id) => {
@@ -108,9 +84,6 @@ export const likeCardAPI = async (id) => {
     .then(res => checkResponse(res))
     .then((data) => {
         return data.likes.length})
-    .catch((error) => {
-        console.log(`Ошибка при сохранении данных: ${error.message}`);
-    })
 };
     
 export const deletelikeCardAPI = async (id) => {
@@ -121,7 +94,4 @@ export const deletelikeCardAPI = async (id) => {
     .then(res => checkResponse(res))
     .then((data) => {
         return data.likes.length})
-    .catch((error) => {
-        console.log(`Ошибка при сохранении данных: ${error.message}`);
-    })
 };
