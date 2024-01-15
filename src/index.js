@@ -2,7 +2,7 @@ import './index.css';
 import { openPopup, closePopup } from './components/modal.js';
 import { enableValidation, clearValidation } from './components/validation.js';
 import { pushInfo, getUserInfo, getCards, postCard, pushAvatar} from './components/api.js'
-import { createCard, toggleLike, deleteCard } from './components/card.js'
+import { createCard, handleLikeClick, handleDeleteClick, handleImagePopupClick } from './components/card.js'
 import { add } from 'lodash';
 
 // константы 
@@ -93,17 +93,17 @@ avatarForm.addEventListener('submit', editAvatar);
 // сабмит добавления карточки, созданной с помощью попапа
 addForm.addEventListener('submit', function() {
     postCard()
-    .then(() => {
+    .then((data) => {
         const newCard = {
             name: cardNameInput.value,
             link: cardLinkInput.value,
-            likes: [],
-            _id: '',
+            likes: data.likes,
+            _id: data._id,
             owner: {
                 _id: userId
             }
         }
-        const newCardElement = createCard(newCard, { toggleLike, deleteCard, handleImageClick });
+        const newCardElement = createCard(newCard, { handleLikeClick, handleDeleteClick, handleImagePopupClick });
         elementsContainer.prepend(newCardElement);
         closePopup(addingPopup);
         addForm.reset();
@@ -120,7 +120,7 @@ addForm.addEventListener('submit', function() {
 
 function addCards(arr) {
     arr.forEach((item) => {
-      elementsContainer.append(createCard(item, { toggleLike, deleteCard, handleImageClick }));
+      elementsContainer.append(createCard(item, { handleLikeClick, handleDeleteClick, handleImagePopupClick }));
     });
 };
 
@@ -184,6 +184,7 @@ Promise.all([getUserInfo(), getCards()])
     profileAvatar.style.backgroundImage = `url("${userInfo.avatar}")`;
     userId = userInfo._id;
     addCards(cards);
+    console.log(cards)
   })
   .catch((error) => {
         console.log(`Ошибка при получении данных: ${error.message}`);

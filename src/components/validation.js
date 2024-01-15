@@ -38,23 +38,17 @@ export const clearValidation = (formElement) => {
     inputList.forEach((inputElement) => {
         inputElement.value = '';
     });
-
-    // из-за этого появляется ошибка: validation.js:44 Uncaught TypeError: Cannot read properties of null (reading 'classList')
-    // at clearValidation (validation.js:44:17)
-    // at openPopup (modal.js:13:66)
-    // at HTMLImageElement.eval (card.js:96:57)
-
     const buttonElement = formElement.querySelector(
         validationConfig.submitButtonSelector,
-      );
-      buttonElement.classList.add(validationConfig.inactiveButtonClass);
-      inputList.forEach((inputElement) => {
+    );
+    buttonElement.classList.add(validationConfig.inactiveButtonClass);
+    inputList.forEach((inputElement) => {
         hideError(
-          formElement,
-          inputElement,
-          validationConfig.inputErrorClass,
-          validationConfig.errorClass,
-        )
+            formElement,
+            inputElement,
+            validationConfig.inputErrorClass,
+            validationConfig.errorClass,
+        );
     });
 };
 

@@ -1,7 +1,7 @@
 import { handleImageClick, elementsTemplate, userId } from '../index.js';
 import { deleteCardAPI, likeCardAPI, deletelikeCardAPI } from './api.js'
 
-export function createCard(card, { toggleLike, deleteCard, handleImageClick }) {
+export function createCard(card, { handleLikeClick, handleDeleteClick, handleImagePopupClick }) {
     const newCard = elementsTemplate.content.cloneNode(true);
     const cardImage = newCard.querySelector('.card__image');
     cardImage.src = card.link;
@@ -17,18 +17,17 @@ export function createCard(card, { toggleLike, deleteCard, handleImageClick }) {
     for (let i = 0; i < card.likes.length; i++) {
         if (card.likes[i]._id === userId) {
             likeButton.classList.toggle('card__like-button_is-active');
-        }
-    }
-
-    toggleLike(likeButton, card._id, likeNumber, card, handleLikeClick);
+        };
+    };
 
     const deleteButton = newCard.querySelector('.card__delete-button');
     if (card.owner._id !== userId) {
         deleteButton.style.visibility = 'hidden';
-    }
+    };
 
-    deleteCard(deleteButton, card._id, handleDeleteClick);
     handleImagePopupClick(cardImage, card);
+    handleLikeClick(likeButton, card._id, likeNumber);
+    handleDeleteClick(deleteButton, card._id);
 
     return newCard;
 }
@@ -72,16 +71,16 @@ export function toggleLike(like, id, likeNumber) {
 }
 
 // Обработчик лайка
-function handleLikeClick(likeButton, cardId, likeNumber) {
+export function handleLikeClick(likeButton, cardId, likeNumber) {
     toggleLike(likeButton, cardId, likeNumber);
 }
 
 // Обработчик удаления карточки
-function handleDeleteClick(deleteButton, cardId) {
+export function handleDeleteClick(deleteButton, cardId) {
     deleteCard(deleteButton, cardId);
 }
 
 // Обработчик клика по картинке
-function handleImagePopupClick(cardImage, card) {
+export function handleImagePopupClick(cardImage, card) {
     handleImageClick(cardImage, card);
 }
