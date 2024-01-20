@@ -38,7 +38,7 @@ export const clearValidation = (formElement, config) => {
 const checkInputValidity = (formElement, inputElement, config) => {
     inputElement.validity.valid
         ? hideError(formElement, inputElement, config)
-        : showError(formElement, inputElement, inputElement.validationMessage, config);
+        : showError(formElement, inputElement, inputElement.dataset.errorMessage || inputElement.validationMessage, config);
 };
 
 const setEventListeners = (formElement, config) => {
