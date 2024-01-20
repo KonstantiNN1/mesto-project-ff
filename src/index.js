@@ -2,7 +2,7 @@ import './index.css';
 import { openPopup, closePopup } from './components/modal.js';
 import { enableValidation, clearValidation } from './components/validation.js';
 import { pushInfo, getUserInfo, getCards, postCard, pushAvatar} from './components/api.js'
-import { createCard, handleLikeClick, handleDeleteClick, handleImagePopupClick } from './components/card.js'
+import { createCard, handleLikeClick, handleDeleteClick } from './components/card.js'
 import { add } from 'lodash';
 
 // константы 
@@ -53,6 +53,7 @@ function editInfo(evt) {
         name: profileNameInput.value,
         about: profileDescriptionInput.value
     };
+    editSubmitButton.textContent = 'Сохранение...';
     pushInfo(newInfo)
     .then((newInfo) => {
         profileTitle.textContent = newInfo.name;
@@ -72,6 +73,7 @@ function editInfo(evt) {
 function editAvatar(evt) {
     evt.preventDefault();
     const avatar = avatarInput.value;
+    avatarSubmitButton.textContent = 'Сохранение...';
     pushAvatar(avatar)
     .then((newAvatar) => {
         profileAvatar.style['background-image'] = `url(${newAvatar.avatar})`;
@@ -92,18 +94,23 @@ avatarForm.addEventListener('submit', editAvatar);
 
 // сабмит добавления карточки, созданной с помощью попапа
 addForm.addEventListener('submit', function() {
-    postCard()
+    addSubmitButton.textContent = 'Сохранение...';
+    const cardInfo = {
+        name: cardNameInput.value,
+        link: cardLinkInput.value
+    };
+    postCard(cardInfo)
     .then((data) => {
         const newCard = {
-            name: cardNameInput.value,
-            link: cardLinkInput.value,
+            name: cardInfo.name,
+            link: cardInfo.link,
             likes: data.likes,
             _id: data._id,
             owner: {
                 _id: userId
             }
         }
-        const newCardElement = createCard(newCard, { handleLikeClick, handleDeleteClick, handleImagePopupClick });
+        const newCardElement = createCard(newCard, { handleLikeClick, handleDeleteClick, handleImageClick }, userId);
         elementsContainer.prepend(newCardElement);
         closePopup(addingPopup);
         addForm.reset();
@@ -115,13 +122,21 @@ addForm.addEventListener('submit', function() {
     .finally(() => {
         addSubmitButton.textContent = "Сохранить";
     });
-    
 })
 
 function addCards(arr) {
     arr.forEach((item) => {
-      elementsContainer.append(createCard(item, { handleLikeClick, handleDeleteClick, handleImagePopupClick }));
+      elementsContainer.append(createCard(item, { handleLikeClick, handleDeleteClick, handleImageClick }, userId));
     });
+};
+
+export function handleImageClick(photo, card) {
+    photo.addEventListener('click', function() {
+        imageImagePopup.src = card.link;
+        imageImagePopup.alt = card.name;
+        captionImagePopup.textContent = card.name;
+        openPopup(imagePopup);
+        });
 };
 
 // открытие попапа с профилем по нажатию на кнопку
@@ -162,18 +177,18 @@ openPhotoAvatar.addEventListener('click', function() {
 // закрытие попапа изменения аватара
 closingAvatarPopup.addEventListener('click', function() {
     closePopup(avatarPopup);
-    clearValidation(avatarPopup)
-          
+    clearValidation(avatarPopup)       
 });
 
-export function handleImageClick(photo, card) {
-    photo.addEventListener('click', function() {
-        openPopup(imagePopup);
-        imageImagePopup.src = card.link;
-        imageImagePopup.alt = card.name;
-        captionImagePopup.textContent = card.name;
-        });
-};
+// const validationConfig = {
+//     formSelector: '.popup__form',
+//     inputSelector: '.popup__input',
+//     submitButtonSelector: '.popup__button',
+//     inputField: '.popup__fieldset',
+//     inactiveButtonClass: 'popup__button_inactive',
+//     inputErrorClass: 'popup__input_err',
+//     errorClass: 'popup__input-error_active',
+//   }; 
 
 enableValidation();
 

@@ -1,5 +1,3 @@
-import { cardLinkInput, cardNameInput, editSubmitButton, addSubmitButton, avatarSubmitButton} from '../index.js';
-
 const config = {
     baseUrl: 'https://nomoreparties.co/v1/wff-cohort-3',
     headers: {
@@ -31,7 +29,6 @@ export const getCards = async () => {
 };
     
 export const pushInfo = async (newInfo) => {
-    editSubmitButton.textContent = 'Сохранение...';
     return fetch(`${config.baseUrl}/users/me`, {
         method: 'PATCH',
         headers: config.headers,
@@ -44,7 +41,6 @@ export const pushInfo = async (newInfo) => {
 };
 
 export const pushAvatar = async (avatar) => {
-    avatarSubmitButton.textContent = 'Сохранение...';
     return fetch(`${config.baseUrl}/users/me/avatar`, {
         method: 'PATCH',
         headers: config.headers,
@@ -55,14 +51,13 @@ export const pushAvatar = async (avatar) => {
     .then(res => checkResponse(res))
 };
     
-export const postCard = async () => {
-    addSubmitButton.textContent = 'Сохранение...';
+export const postCard = async (cardInfo) => {
     return fetch(`${config.baseUrl}/cards`, {
         method: 'POST',
         headers: config.headers,
         body: JSON.stringify({
-            name: cardNameInput.value,
-            link: cardLinkInput.value
+            name: cardInfo.name,
+            link: cardInfo.link
         })
     })
     .then(res => checkResponse(res))

@@ -48,6 +48,7 @@ export const clearValidation = (formElement) => {
             inputElement,
             validationConfig.inputErrorClass,
             validationConfig.errorClass,
+
         );
     });
 };
@@ -66,7 +67,7 @@ const setEventListeners = (formElement) => {
         buttonElement.addEventListener('input', function() {
             toggleButtonState(inputList, buttonElement);
         });
-    }
+    };
 
     inputList.forEach((inputElement) => {
         inputElement.addEventListener('input', function () {
